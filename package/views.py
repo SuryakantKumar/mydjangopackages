@@ -1,5 +1,6 @@
 import importlib
 import json
+import requests
 
 from django.conf import settings
 from django.contrib import messages
@@ -345,6 +346,15 @@ def package_detail(request, slug, template_name="package/package.html"):
     if request.GET.get("message"):
         messages.add_message(request, messages.INFO, request.GET.get("message"))
 
+    if request.user.is_authenticated:
+        repo = slug
+        owner = package.created_by.username
+        print(repo, owner)
+        url = "https://api.github.com/repos/" + owner + "/" + repo + "/issues"
+        issues = requests.get(url)
+        # issues = requests.get("https://api.github.com/repos/jschneier/django-storages/issues")
+        issues = issues.json
+
     return render(request, template_name,
             dict(
                 package=package,
@@ -353,7 +363,8 @@ def package_detail(request, slug, template_name="package/package.html"):
                 pypi_no_release=pypi_no_release,
                 warnings=warnings,
                 latest_version=package.last_released(),
-                repo=package.repo
+                repo=package.repo,
+                issues=issues
             )
         )
 

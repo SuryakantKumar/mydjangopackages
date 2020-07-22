@@ -244,6 +244,18 @@
             </p>
         </div>
     </div>
+    <div class="row" style="padding-bottom: 20px;">
+        <div class="col-sm-12">
+            <h2>{% trans "Git Issues" %}</h2>
+                {% for issue in issues %}
+                    <!-- <p> {{issue }}</p>
+                    <br> -->
+                    <div class="card" style="height: 5vh;">
+                        <a href="{{issue.html_url}}"><h4> {{issue.title}} </h4></a>
+                    </div>
+                {% endfor %}
+        </div>
+    </div>
 {% endblock %}
 
 {% block javascript %}
